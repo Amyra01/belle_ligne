@@ -1,0 +1,128 @@
+{
+  "magazines": [
+    {
+      "id": "vol-12",
+      "volume": "VOL. 12",
+      "issue": "ISSUE 01",
+      "season": "SUMMER / A-W 2028",
+      "title": "The Future Is Now",
+      "subtitle": "Transformative Teal Leads the 2028 Palette & Neo-Silhouettes",
+      "coverImage": "/images/cover_teal.jpg",
+      "editor": "Daisy",
+      "pagesCount": 64,
+      "featured": true,
+      "accentColor": "#146872",
+      "description": "The flagship edition investigating oceanic bioluminescence, liquid silk faille, and the boundary between physical tailoring and digital avatars.",
+      "tags": [
+        "2028 Trends",
+        "Transformative Teal",
+        "Haute Couture",
+        "Silk Faille"
+      ],
+      "createdTimestamp": 1793298900000
+    },
+    {
+      "id": "vol-11",
+      "volume": "VOL. 11",
+      "issue": "ISSUE 04",
+      "season": "SPRING 2028",
+      "title": "Streetwear Evolves",
+      "subtitle": "Street Meets Art — Bolder, Structured, More Expressive",
+      "coverImage": "/images/feature_streetwear.jpg",
+      "editor": "Daisy",
+      "pagesCount": 58,
+      "featured": true,
+      "accentColor": "#A65539",
+      "description": "Architectural cargo, origami folding mechanics, and technical weather-responsive gear redefining Paris and Tokyo streets.",
+      "tags": [
+        "Streetwear",
+        "Techwear",
+        "Origami Fold",
+        "Tokyo Runway"
+      ],
+      "createdTimestamp": 1793298800000
+    },
+    {
+      "id": "vol-10",
+      "volume": "VOL. 10",
+      "issue": "ISSUE 03",
+      "season": "A/W 2027",
+      "title": "The Next Wave",
+      "subtitle": "Avant-Garde Menswear & Sculptured Lapels",
+      "coverImage": "/images/cover_nextwave.jpg",
+      "editor": "Daisy",
+      "pagesCount": 52,
+      "featured": false,
+      "accentColor": "#C0804D",
+      "description": "Breaking traditional tailoring conventions with asymmetric ochre origami lapels, obsidian shields, and protective outerwear.",
+      "tags": [
+        "Menswear",
+        "Avant-Garde",
+        "Origami Lapel",
+        "Sculptural"
+      ],
+      "createdTimestamp": 1793298700000
+    }
+  ],
+  "customUserMagazines": [
+    {
+      "id": "custom-mag-1793303434444",
+      "volume": "EDITION 1",
+      "issue": "VOL. 14",
+      "season": "CREATOR SPECIAL 2028",
+      "title": "NEO VOGUE 2028",
+      "subtitle": "Avant-Garde Architectural Draping",
+      "coverImage": "/images/cover_teal.jpg",
+      "editor": "Daisy",
+      "pagesCount": 16,
+      "featured": true,
+      "isUserCreated": true,
+      "accentColor": "#146872",
+      "description": "Designed and painted using the Belle Ligne Interactive Digital Magazine Canvas.",
+      "tags": [
+        "Custom Magazine",
+        "Digital Paint",
+        "User Edition"
+      ],
+      "createdTimestamp": 1793303434444
+    }
+  ],
+  "subscribers": [
+    {
+      "email": "vogue.critic@paris.com",
+      "name": "Aria Laurent",
+      "date": "2028-06-12",
+      "tier": "VIP"
+    },
+    {
+      "email": "daisy.editor@pcte.edu.in",
+      "name": "Daisy",
+      "date": "2028-07-01",
+      "tier": "Editorial Director"
+    },
+    {
+      "email": "tokyo.street@kurogane.jp",
+      "name": "Kenji Sato",
+      "date": "2028-08-15",
+      "tier": "Designer"
+    }
+  ],
+  "users": [
+    {
+      "email": "daisy.editor@pcte.edu.in",
+      "name": "Daisy",
+      "role": "Editorial Director & Platform Lead",
+      "savedArticles": [
+        "trends-2028",
+        "streetwear-evolves"
+      ],
+      "savedLooks": [
+        "teal-couture",
+        "streetwear-noir"
+      ],
+      "lastLogin": "2026-10-30T02:27:33.358Z",
+      "tier": "Haute Couture Studio"
+    }
+  ],
+  "savedItems": {}
+}

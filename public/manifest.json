@@ -1,0 +1,24 @@
+{
+  "name": "Belle Ligne Digital Fashion Magazine",
+  "short_name": "Belle Ligne",
+  "description": "Premium Digital Fashion Magazine, Live 3D Runway & Editorial Studio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07090D",
+  "theme_color": "#146872",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/images/cover_teal.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/cover_teal.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
