@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { authService } from '../utils/supabaseClient';
 
 export default function AuthPage({ onBack, onLoginSuccess, onOpenCreator }) {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -28,22 +29,11 @@ export default function AuthPage({ onBack, onLoginSuccess, onOpenCreator }) {
     };
 
     try {
-      // Direct sync with backend database on port 5000
-      const res = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userPayload)
-      });
-      const data = await res.json();
-      if (data && data.user) {
-        userPayload.id = data.user.id;
-      }
+      // Sync with Supabase Auth Cloud & Express API
+      await authService.syncUser(userPayload);
     } catch (err) {
       console.warn('Backend sync local fallback:', err);
     }
-
-    // Save to local storage for persistent session
-    localStorage.setItem('belle_ligne_user', JSON.stringify(userPayload));
 
     setIsLoading(false);
     if (onLoginSuccess) {

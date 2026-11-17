@@ -6,6 +6,7 @@ import {
   Move, Plus, ZoomIn, ZoomOut, Scissors, Sparkle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { magazineService } from '../utils/supabaseClient';
 
 export default function MagazineCreator({ onBack, onMagazineSaved, currentUser }) {
   const canvasRef = useRef(null);
@@ -344,13 +345,9 @@ export default function MagazineCreator({ onBack, onMagazineSaved, currentUser }
     };
 
     try {
-      await fetch('http://localhost:5000/api/magazines', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newMagazinePayload)
-      });
+      await magazineService.create(newMagazinePayload);
     } catch (e) {
-      console.log('Saved locally to memory');
+      console.log('Saved to fallback storage');
     }
 
     if (onMagazineSaved) {

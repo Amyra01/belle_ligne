@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, BarChart3, Users, BookOpen, PlusCircle, 
   Mail, Calendar, CheckCircle2, TrendingUp, Sliders, ShieldCheck, 
-  Send, Sparkles, RefreshCw, MessageSquare, Clock, FileCheck, AlertCircle, Edit3
+  Send, Sparkles, RefreshCw, MessageSquare, Clock, FileCheck, AlertCircle, Edit3, Database
 } from 'lucide-react';
 import { EDITORIAL_ANALYTICS, ARTICLES, CATEGORIES } from '../data/magazineData';
+import { isSupabaseConfigured, workflowService } from '../utils/supabaseClient';
 
 export default function EditorCRMPage({ onBack, onArticleCreated }) {
   const [activeTab, setActiveTab] = useState('workflow'); // 'workflow' | 'crm' | 'analytics' | 'publish' | 'articles'
@@ -198,8 +199,13 @@ export default function EditorCRMPage({ onBack, onArticleCreated }) {
         </div>
 
         <div className="flex items-center space-x-2">
-          <span className="px-3 py-1 rounded-full bg-teal-950 border border-teal-500/40 text-teal-300 text-xs font-mono">
-            Backend Attached (Port 5000)
+          <span className={`px-3 py-1 rounded-full border text-xs font-mono flex items-center space-x-1.5 ${
+            isSupabaseConfigured 
+              ? 'bg-emerald-950 border-emerald-500/50 text-emerald-300' 
+              : 'bg-teal-950 border-teal-500/40 text-teal-300'
+          }`}>
+            <Database size={12} />
+            <span>{isSupabaseConfigured ? 'Supabase Postgres Cloud Connected' : 'Supabase Backend Ready & Local API Active'}</span>
           </span>
         </div>
       </div>

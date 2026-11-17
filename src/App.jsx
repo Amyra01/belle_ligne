@@ -42,6 +42,7 @@ import MoodBoardMakerPage from './pages/MoodBoardMakerPage';
 
 import { runwayAudio } from './utils/audioSynth';
 import { ARTICLES as INITIAL_ARTICLES, MAGAZINES_CATALOG } from './data/magazineData';
+import { magazineService, authService, looksService, moodboardService, isSupabaseConfigured } from './utils/supabaseClient';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'runway' | 'reels' | 'flipbook' | 'lookbooks' | 'editor-crm' | 'style-quiz' | 'creator'
@@ -86,10 +87,9 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [articlesList, setArticlesList] = useState(INITIAL_ARTICLES);
 
-  // Fetch magazines from Express backend database on startup
+  // Fetch magazines from Supabase Cloud / Express backend on startup
   useEffect(() => {
-    fetch('http://localhost:5000/api/magazines')
-      .then(res => res.json())
+    magazineService.getAll()
       .then(data => {
         if (Array.isArray(data)) {
           const userMags = data.filter(m => m.isUserCreated);
@@ -280,13 +280,7 @@ export default function App() {
         <MoodBoardMakerPage
           onBack={() => navigateTo('home')}
           onSaveBoard={async (board) => {
-            try {
-              await fetch('http://localhost:5000/api/moodboards', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(board)
-              });
-            } catch (e) {}
+            await moodboardService.saveBoard(board);
           }}
         />
       )}
