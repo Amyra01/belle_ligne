@@ -26,6 +26,7 @@ import ScrollProgress from './components/ScrollProgress';
 import VirtualTryOnModal from './components/VirtualTryOnModal';
 import ColorPaletteFinderModal from './components/ColorPaletteFinderModal';
 import StyleDNACardModal from './components/StyleDNACardModal';
+import WelcomeGuideModal from './components/WelcomeGuideModal';
 
 // Dedicated Sub-Pages
 import RunwayPage from './pages/RunwayPage';
@@ -60,6 +61,10 @@ export default function App() {
   const [isTryOnOpen, setIsTryOnOpen] = useState(false);
   const [isPaletteFinderOpen, setIsPaletteFinderOpen] = useState(false);
   const [isDnaCardOpen, setIsDnaCardOpen] = useState(false);
+  const [isGuideOpen, setIsGuideOpen] = useState(() => {
+    // Show guide automatically on first visit
+    return !localStorage.getItem('belle_ligne_guide_seen');
+  });
   
   // Reading & Look wardrobe
   const [savedArticles, setSavedArticles] = useState(['trends-2028', 'streetwear-evolves']);
@@ -84,7 +89,11 @@ export default function App() {
   });
 
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    // Default to dark mode for luxury editorial aesthetic
+    const saved = localStorage.getItem('belle_ligne_theme');
+    return saved !== null ? saved === 'dark' : true;
+  });
   const [articlesList, setArticlesList] = useState(INITIAL_ARTICLES);
 
   // Fetch magazines from Supabase Cloud / Express backend on startup
@@ -125,12 +134,14 @@ export default function App() {
     };
   }, [currentPage]);
 
-  // Sync dark mode class
+  // Sync dark mode class & save preference
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
+      localStorage.setItem('belle_ligne_theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      localStorage.setItem('belle_ligne_theme', 'light');
     }
   }, [darkMode]);
 
@@ -193,6 +204,7 @@ export default function App() {
         onOpenTryOn={() => setIsTryOnOpen(true)}
         onOpenPaletteFinder={() => setIsPaletteFinderOpen(true)}
         onOpenStyleDna={() => setIsDnaCardOpen(true)}
+        onOpenGuide={() => setIsGuideOpen(true)}
       />
 
       {/* 4. DEDICATED FULL-SCREEN PAGES ROUTER */}
@@ -486,6 +498,18 @@ export default function App() {
           setIs404Open(false);
         }}
         onOpenSearch={() => setIsSearchOpen(true)}
+      />
+
+      {/* Interactive Platform Guide & Welcome Tour */}
+      <WelcomeGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => {
+          setIsGuideOpen(false);
+          localStorage.setItem('belle_ligne_guide_seen', 'true');
+        }}
+        onNavigate={navigateTo}
+        onOpenTryOn={() => setIsTryOnOpen(true)}
+        onOpenDna={() => setIsDnaCardOpen(true)}
       />
 
     </div>

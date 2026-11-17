@@ -19,7 +19,8 @@ export default function Navbar({
   onOpenSearch,
   onOpenTryOn,
   onOpenPaletteFinder,
-  onOpenStyleDna
+  onOpenStyleDna,
+  onOpenGuide
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -116,6 +117,16 @@ export default function Navbar({
               >
                 <Sparkles size={13} />
                 <span>Style DNA</span>
+              </button>
+
+              {/* Guide / How to Use Trigger */}
+              <button
+                onClick={onOpenGuide}
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-teal-950/70 border border-teal-500/50 text-teal-300 hover:text-white hover:bg-teal-900 text-xs font-semibold transition-all shadow"
+                title="Interactive Guide & Tour"
+              >
+                <Compass size={13} className="text-teal-400 animate-spin-slow" />
+                <span className="hidden sm:inline">Guide</span>
               </button>
 
               {/* Search Modal Trigger */}
