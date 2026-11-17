@@ -1,51 +1,33 @@
-// Service Worker for Belle Ligne Digital Magazine PWA (Offline Reading & Fast Caching)
-const CACHE_NAME = 'belle-ligne-v1';
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/images/cover_teal.jpg',
-  '/images/feature_streetwear.jpg',
-  '/images/cover_nextwave.jpg',
-  '/images/contents_style.jpg'
-];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
-    })
-  );
+// Belle Ligne Self-Clearing Service Worker
+// Automatically purges stale caches and ensures instant fresh asset loading
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
-      return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      );
-    })
-  );
-  self.clients.claim();
-});
-
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).then((response) => {
-        // Cache images for offline reading
-        if (response.status === 200 && event.request.url.includes('/images/')) {
-          const resClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
-        }
-        return response;
-      }).catch(() => {
-        if (event.request.destination === 'document') {
-          return caches.match('/');
+      return Promise.all(keys.map((key) => caches.delete(key)));
+    }).then(() => {
+      return self.registration.unregister();
+    }).then(() => {
+      return self.clients.claim();
+    }).then(() => {
+      return self.clients.matchAll({ type: 'window' });
+    }).then((clients) => {
+      clients.forEach((client) => {
+        if (client.url && 'navigate' in client) {
+          client.navigate(client.url);
         }
       });
     })
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  // Always fetch live from network, never serve stale HTML or obsolete asset bundles
+  if (event.request.method !== 'GET') return;
+  event.respondWith(
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
