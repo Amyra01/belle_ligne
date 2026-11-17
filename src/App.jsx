@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Lenis from 'lenis';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import TrendingStrip from './components/TrendingStrip';
-import Runway3D from './components/Runway3D';
 import RunwayReel from './components/RunwayReel';
 import MagazineReader from './components/MagazineReader';
 import LookbookSwipe from './components/LookbookSwipe';
@@ -12,34 +11,37 @@ import TableOfContents from './components/TableOfContents';
 import EditorialFeed from './components/EditorialFeed';
 import Footer from './components/Footer';
 
-// Modals
-import ArticleModal from './components/ArticleModal';
-import StyleQuizModal from './components/StyleQuizModal';
-import EditorialCMS from './components/EditorialCMS';
-import AuthModal from './components/AuthModal';
-import SavedArticlesDrawer from './components/SavedArticlesDrawer';
-import SearchModal from './components/SearchModal';
-import VideoModal from './components/VideoModal';
-import Magazine404 from './components/Magazine404';
+// Lightweight Eager Modals
 import CustomCursor from './components/CustomCursor';
 import ScrollProgress from './components/ScrollProgress';
-import VirtualTryOnModal from './components/VirtualTryOnModal';
-import ColorPaletteFinderModal from './components/ColorPaletteFinderModal';
-import StyleDNACardModal from './components/StyleDNACardModal';
 import WelcomeGuideModal from './components/WelcomeGuideModal';
 
-// Dedicated Sub-Pages
-import RunwayPage from './pages/RunwayPage';
-import ReelsPage from './pages/ReelsPage';
-import FlipbookPage from './pages/FlipbookPage';
-import LookbookPage from './pages/LookbookPage';
-import EditorCRMPage from './pages/EditorCRMPage';
-import StyleQuizPage from './pages/StyleQuizPage';
-import AuthPage from './pages/AuthPage';
-import MagazineCreator from './components/MagazineCreator';
-import FashionCultureSuitePage from './pages/FashionCultureSuitePage';
-import SmartSemanticSearchPage from './pages/SmartSemanticSearchPage';
-import MoodBoardMakerPage from './pages/MoodBoardMakerPage';
+// Code-Split Heavy 3D Scene, Sub-pages, and Secondary Modals (loaded on-demand)
+const Runway3D = lazy(() => import('./components/Runway3D'));
+const RunwayPage = lazy(() => import('./pages/RunwayPage'));
+const ReelsPage = lazy(() => import('./pages/ReelsPage'));
+const FlipbookPage = lazy(() => import('./pages/FlipbookPage'));
+const LookbookPage = lazy(() => import('./pages/LookbookPage'));
+const EditorCRMPage = lazy(() => import('./pages/EditorCRMPage'));
+const StyleQuizPage = lazy(() => import('./pages/StyleQuizPage'));
+const AuthPage = lazy(() => import('./pages/AuthPage'));
+const MagazineCreator = lazy(() => import('./components/MagazineCreator'));
+const FashionCultureSuitePage = lazy(() => import('./pages/FashionCultureSuitePage'));
+const SmartSemanticSearchPage = lazy(() => import('./pages/SmartSemanticSearchPage'));
+const MoodBoardMakerPage = lazy(() => import('./pages/MoodBoardMakerPage'));
+
+// Code-Split Modals
+const ArticleModal = lazy(() => import('./components/ArticleModal'));
+const StyleQuizModal = lazy(() => import('./components/StyleQuizModal'));
+const EditorialCMS = lazy(() => import('./components/EditorialCMS'));
+const AuthModal = lazy(() => import('./components/AuthModal'));
+const SavedArticlesDrawer = lazy(() => import('./components/SavedArticlesDrawer'));
+const SearchModal = lazy(() => import('./components/SearchModal'));
+const VideoModal = lazy(() => import('./components/VideoModal'));
+const Magazine404 = lazy(() => import('./components/Magazine404'));
+const VirtualTryOnModal = lazy(() => import('./components/VirtualTryOnModal'));
+const ColorPaletteFinderModal = lazy(() => import('./components/ColorPaletteFinderModal'));
+const StyleDNACardModal = lazy(() => import('./components/StyleDNACardModal'));
 
 import { runwayAudio } from './utils/audioSynth';
 import { ARTICLES as INITIAL_ARTICLES, MAGAZINES_CATALOG } from './data/magazineData';
@@ -208,94 +210,103 @@ export default function App() {
       />
 
       {/* 4. DEDICATED FULL-SCREEN PAGES ROUTER */}
-      {currentPage === 'creator' && (
-        <MagazineCreator
-          onBack={() => navigateTo('home')}
-          onMagazineSaved={handleMagazineSaved}
-          currentUser={currentUser}
-        />
-      )}
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#07090D] text-white">
+          <div className="flex flex-col items-center space-y-3">
+            <div className="w-8 h-8 border-2 border-teal-500 border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs font-mono tracking-widest uppercase text-teal-400">Loading Belle Ligne Studio...</span>
+          </div>
+        </div>
+      }>
+        {currentPage === 'creator' && (
+          <MagazineCreator
+            onBack={() => navigateTo('home')}
+            onMagazineSaved={handleMagazineSaved}
+            currentUser={currentUser}
+          />
+        )}
 
-      {currentPage === 'runway' && (
-        <RunwayPage
-          onBack={() => navigateTo('home')}
-          isMusicPlaying={isMusicPlaying}
-          toggleMusic={toggleMusic}
-          onSaveLook={toggleSaveLook}
-          savedLooks={savedLooks}
-        />
-      )}
+        {currentPage === 'runway' && (
+          <RunwayPage
+            onBack={() => navigateTo('home')}
+            isMusicPlaying={isMusicPlaying}
+            toggleMusic={toggleMusic}
+            onSaveLook={toggleSaveLook}
+            savedLooks={savedLooks}
+          />
+        )}
 
-      {currentPage === 'reels' && (
-        <ReelsPage
-          onBack={() => navigateTo('home')}
-          onSaveLook={toggleSaveLook}
-          savedLooks={savedLooks}
-        />
-      )}
+        {currentPage === 'reels' && (
+          <ReelsPage
+            onBack={() => navigateTo('home')}
+            onSaveLook={toggleSaveLook}
+            savedLooks={savedLooks}
+          />
+        )}
 
-      {currentPage === 'flipbook' && (
-        <FlipbookPage
-          onBack={() => navigateTo('home')}
-          onOpenArticle={(id) => setSelectedArticleId(id)}
-          customMagazines={customMagazines}
-        />
-      )}
+        {currentPage === 'flipbook' && (
+          <FlipbookPage
+            onBack={() => navigateTo('home')}
+            onOpenArticle={(id) => setSelectedArticleId(id)}
+            customMagazines={customMagazines}
+          />
+        )}
 
-      {currentPage === 'lookbooks' && (
-        <LookbookPage
-          onBack={() => navigateTo('home')}
-          onSaveLook={toggleSaveLook}
-          savedLooks={savedLooks}
-        />
-      )}
+        {currentPage === 'lookbooks' && (
+          <LookbookPage
+            onBack={() => navigateTo('home')}
+            onSaveLook={toggleSaveLook}
+            savedLooks={savedLooks}
+          />
+        )}
 
-      {currentPage === 'editor-crm' && (
-        <EditorCRMPage
-          onBack={() => navigateTo('home')}
-          onArticleCreated={handleArticleCreated}
-        />
-      )}
+        {currentPage === 'editor-crm' && (
+          <EditorCRMPage
+            onBack={() => navigateTo('home')}
+            onArticleCreated={handleArticleCreated}
+          />
+        )}
 
-      {currentPage === 'style-quiz' && (
-        <StyleQuizPage
-          onBack={() => navigateTo('home')}
-          onSelectArticle={(id) => setSelectedArticleId(id)}
-        />
-      )}
+        {currentPage === 'style-quiz' && (
+          <StyleQuizPage
+            onBack={() => navigateTo('home')}
+            onSelectArticle={(id) => setSelectedArticleId(id)}
+          />
+        )}
 
-      {currentPage === 'auth' && (
-        <AuthPage
-          onBack={() => navigateTo('home')}
-          onLoginSuccess={(user) => {
-            setCurrentUser(user);
-          }}
-          onOpenCreator={() => navigateTo('creator')}
-        />
-      )}
+        {currentPage === 'auth' && (
+          <AuthPage
+            onBack={() => navigateTo('home')}
+            onLoginSuccess={(user) => {
+              setCurrentUser(user);
+            }}
+            onOpenCreator={() => navigateTo('creator')}
+          />
+        )}
 
-      {currentPage === 'fashion-suite' && (
-        <FashionCultureSuitePage
-          onBack={() => navigateTo('home')}
-          onSelectArticle={(id) => setSelectedArticleId(id)}
-        />
-      )}
+        {currentPage === 'fashion-suite' && (
+          <FashionCultureSuitePage
+            onBack={() => navigateTo('home')}
+            onSelectArticle={(id) => setSelectedArticleId(id)}
+          />
+        )}
 
-      {currentPage === 'semantic-search' && (
-        <SmartSemanticSearchPage
-          onBack={() => navigateTo('home')}
-          onSelectArticle={(id) => setSelectedArticleId(id)}
-        />
-      )}
+        {currentPage === 'semantic-search' && (
+          <SmartSemanticSearchPage
+            onBack={() => navigateTo('home')}
+            onSelectArticle={(id) => setSelectedArticleId(id)}
+          />
+        )}
 
-      {currentPage === 'moodboard' && (
-        <MoodBoardMakerPage
-          onBack={() => navigateTo('home')}
-          onSaveBoard={async (board) => {
-            await moodboardService.saveBoard(board);
-          }}
-        />
-      )}
+        {currentPage === 'moodboard' && (
+          <MoodBoardMakerPage
+            onBack={() => navigateTo('home')}
+            onSaveBoard={async (board) => {
+              await moodboardService.saveBoard(board);
+            }}
+          />
+        )}
+      </Suspense>
 
       {/* 5. MAIN HOME PAGE OVERVIEW */}
       {currentPage === 'home' && (
@@ -335,12 +346,18 @@ export default function App() {
               </button>
             </div>
 
-            <Runway3D
-              isMusicPlaying={isMusicPlaying}
-              toggleMusic={toggleMusic}
-              onSaveLook={toggleSaveLook}
-              savedLooks={savedLooks}
-            />
+            <Suspense fallback={
+              <div className="w-full h-96 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center">
+                <span className="text-xs font-mono text-teal-400 animate-pulse">Initializing 3D WebGL Runway Catwalk...</span>
+              </div>
+            }>
+              <Runway3D
+                isMusicPlaying={isMusicPlaying}
+                toggleMusic={toggleMusic}
+                onSaveLook={toggleSaveLook}
+                savedLooks={savedLooks}
+              />
+            </Suspense>
           </section>
 
           {/* Section 4: Vertical Video Runway Reels */}
